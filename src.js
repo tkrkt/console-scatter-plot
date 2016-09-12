@@ -110,6 +110,8 @@ export default class ScatterPlot {
 
   createPlotter() {
     const plotter = new Plotter();
+
+    // calc min/max value
     const range = this.points.reduce((range, {x, y}) => {
       if (range) {
         return [
@@ -123,6 +125,7 @@ export default class ScatterPlot {
       }
     }, null);
 
+    // set min/max
     if (typeof this.xAxis.min === 'undefined') {
       this.xAxis.min = range[0];
     }
@@ -145,10 +148,9 @@ export default class ScatterPlot {
     }
 
     const topMargin = 1;
-    const yLabelLen = Math.max(('' + this.yAxis.min).length, ('' + this.yAxis.max).length);
-    const leftMargin = yLabelLen + 1;
+    const leftMargin = Math.max(('' + this.yAxis.min).length, ('' + this.yAxis.max).length) + 1;
 
-    // axis label
+    // print axis label
     plotter.horizonalText({
       x: leftMargin,
       y: 0,
@@ -163,7 +165,7 @@ export default class ScatterPlot {
       color: this.xAxis.color
     });
 
-    // border
+    // print border
     plotter.horizonalText({
       x: leftMargin,
       y: topMargin,
@@ -185,13 +187,13 @@ export default class ScatterPlot {
       text: '|'.repeat(this.yAxis.length)
     });
 
-    // corner
+    // print corner
     plotter.setChar({x: leftMargin, y: topMargin, char: '+'});
     plotter.setChar({x: leftMargin + this.xAxis.length, y: topMargin, char: '+'});
     plotter.setChar({x: leftMargin + this.xAxis.length, y: topMargin + this.yAxis.length, char: '+'});
     plotter.setChar({x: leftMargin, y: topMargin + this.yAxis.length, char: '+'});
 
-    // min/max
+    // print min/max
     plotter.horizonalText({
       x: leftMargin - 1,
       y: topMargin,
@@ -221,6 +223,7 @@ export default class ScatterPlot {
       color: this.xAxis.color
     });
 
+    // print points
     this.points.forEach(({x, y, marker, color}) => {
       const xStep = Math.floor((x - this.xAxis.min) * this.xAxis.length / (this.xAxis.max - this.xAxis.min));
       const yStep = Math.floor((y - this.yAxis.min) * this.yAxis.length / (this.yAxis.max - this.yAxis.min));
