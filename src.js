@@ -136,6 +136,14 @@ export default class ScatterPlot {
       this.yAxis.max = range[3];
     }
 
+    // differentiate min/max
+    if (this.xAxis.min === this.xAxis.max) {
+      this.xAxis.max += 1;
+    }
+    if (this.yAxis.min === this.yAxis.max) {
+      this.yAxis.max += 1;
+    }
+
     const topMargin = 1;
     const yLabelLen = Math.max(('' + this.yAxis.min).length, ('' + this.yAxis.max).length);
     const leftMargin = yLabelLen + 1;
