@@ -13,6 +13,8 @@ const NodeColor = {
   magenta: '\u001b[35m',
   cyan: '\u001b[36m',
   white: '\u001b[37m',
+  gray: '\u001b[90m',
+  grey: '\u001b[90m',
   reset: '\u001b[0m'
 };
 
@@ -61,6 +63,7 @@ class Plotter {
   print() {
     const isNode = typeof window === 'undefined';
     const args = [];
+
     const str = Array.from(this.data).map(row => {
       if (!row) return '';
 
@@ -70,7 +73,8 @@ class Plotter {
         const {char, color} = item;
         if (color && isNode && NodeColor[color]) {
           return NodeColor[color] + char + NodeColor.reset;
-        } else if (color && isNode) {
+        } else if (color && !isNode) {
+          args.push('color:' + color, '');
           return '%c' + char + '%c';
         } else {
           return char;
@@ -96,14 +100,16 @@ class Plotter {
 }
 
 export default class ScatterPlot {
-  constructor({xAxis = {}, yAxis = {}, points = []}) {
-    this.xAxis = xAxis;
-    this.xAxis.label = this.xAxis.label || 'x';
-    this.xAxis.length = this.xAxis.length || 60;
+  constructor({xAxis = {}, yAxis = {}, points = []} = {}) {
+    this.xAxis = Object.assign({}, {
+      label: 'x',
+      length: 60
+    }, xAxis);
 
-    this.yAxis = yAxis;
-    this.yAxis.label = this.yAxis.label || 'y';
-    this.yAxis.length = this.yAxis.length || 20;
+    this.yAxis = Object.assign({}, {
+      label: 'y',
+      length: 20
+    }, yAxis);
 
     this.points = points;
   }
@@ -123,7 +129,7 @@ export default class ScatterPlot {
       } else {
         return [x, x, y, y];
       }
-    }, null);
+    }, null) || [0, 0, 0, 0];
 
     // set min/max
     if (typeof this.xAxis.min === 'undefined') {
@@ -150,6 +156,38 @@ export default class ScatterPlot {
     const topMargin = 1;
     const leftMargin = Math.max(('' + this.yAxis.min).length, ('' + this.yAxis.max).length) + 1;
 
+    // print border
+    plotter.horizonalText({
+      x: leftMargin,
+      y: topMargin,
+      text: '-'.repeat(this.xAxis.length),
+      color: this.xAxis.color
+    });
+    plotter.horizonalText({
+      x: leftMargin,
+      y: topMargin + this.yAxis.length,
+      text: '-'.repeat(this.xAxis.length),
+      color: this.xAxis.color
+    });
+    plotter.verticalText({
+      x: leftMargin,
+      y: topMargin,
+      text: '|'.repeat(this.yAxis.length),
+      color: this.yAxis.color
+    });
+    plotter.verticalText({
+      x: leftMargin + this.xAxis.length,
+      y: topMargin,
+      text: '|'.repeat(this.yAxis.length),
+      color: this.yAxis.color
+    });
+
+    // print corner
+    plotter.setChar({x: leftMargin, y: topMargin, char: '+'});
+    plotter.setChar({x: leftMargin + this.xAxis.length, y: topMargin, char: '+'});
+    plotter.setChar({x: leftMargin + this.xAxis.length, y: topMargin + this.yAxis.length, char: '+'});
+    plotter.setChar({x: leftMargin, y: topMargin + this.yAxis.length, char: '+'});
+
     // print axis label
     plotter.horizonalText({
       x: leftMargin,
@@ -165,71 +203,55 @@ export default class ScatterPlot {
       color: this.xAxis.color
     });
 
-    // print border
+    // print minX/maxX
+    let [minXPos, maxXPos] = [leftMargin, leftMargin + this.xAxis.length];
+    if (this.xAxis.flip) {
+      [minXPos, maxXPos] = [maxXPos, minXPos];
+    }
     plotter.horizonalText({
-      x: leftMargin,
-      y: topMargin,
-      text: '-'.repeat(this.xAxis.length)
-    });
-    plotter.horizonalText({
-      x: leftMargin,
-      y: topMargin + this.yAxis.length,
-      text: '-'.repeat(this.xAxis.length)
-    });
-    plotter.verticalText({
-      x: leftMargin,
-      y: topMargin,
-      text: '|'.repeat(this.yAxis.length)
-    });
-    plotter.verticalText({
-      x: leftMargin + this.xAxis.length,
-      y: topMargin,
-      text: '|'.repeat(this.yAxis.length)
-    });
-
-    // print corner
-    plotter.setChar({x: leftMargin, y: topMargin, char: '+'});
-    plotter.setChar({x: leftMargin + this.xAxis.length, y: topMargin, char: '+'});
-    plotter.setChar({x: leftMargin + this.xAxis.length, y: topMargin + this.yAxis.length, char: '+'});
-    plotter.setChar({x: leftMargin, y: topMargin + this.yAxis.length, char: '+'});
-
-    // print min/max
-    plotter.horizonalText({
-      x: leftMargin - 1,
-      y: topMargin,
-      text: this.yAxis.max,
-      align: Align.right,
-      color: this.yAxis.color
-    });
-    plotter.horizonalText({
-      x: leftMargin - 1,
-      y: topMargin + this.yAxis.length,
-      text: this.yAxis.min,
-      align: Align.right,
-      color: this.yAxis.color
-    });
-    plotter.horizonalText({
-      x: leftMargin,
+      x: minXPos,
       y: topMargin + this.yAxis.length + 1,
       text: this.xAxis.min,
       align: Align.center,
       color: this.xAxis.color
     });
     plotter.horizonalText({
-      x: leftMargin + this.xAxis.length,
+      x: maxXPos,
       y: topMargin + this.yAxis.length + 1,
       text: this.xAxis.max,
       align: Align.center,
       color: this.xAxis.color
     });
 
+    // pring minY/maxY
+    let [minYPos, maxYPos] = [topMargin + this.yAxis.length, topMargin];
+    if (this.yAxis.flip) {
+      [minYPos, maxYPos] = [maxYPos, minYPos];
+    }
+    plotter.horizonalText({
+      x: leftMargin - 1,
+      y: maxYPos,
+      text: this.yAxis.max,
+      align: Align.right,
+      color: this.yAxis.color
+    });
+    plotter.horizonalText({
+      x: leftMargin - 1,
+      y: minYPos,
+      text: this.yAxis.min,
+      align: Align.right,
+      color: this.yAxis.color
+    });
+
     // print points
     this.points.forEach(({x, y, marker, color}) => {
       const xStep = Math.floor((x - this.xAxis.min) * this.xAxis.length / (this.xAxis.max - this.xAxis.min));
       const yStep = Math.floor((y - this.yAxis.min) * this.yAxis.length / (this.yAxis.max - this.yAxis.min));
+      const xFlip = this.xAxis.flip ? this.xAxis.length - xStep : xStep;
+      const yFlip = this.yAxis.flip ? yStep : this.yAxis.length - yStep;
       plotter.setChar({
-        x: leftMargin + xStep,
-        y: topMargin + this.yAxis.length - yStep,
+        x: leftMargin + xFlip,
+        y: topMargin + yFlip,
         char: marker || '*',
         color
       });

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>console-scatter-plot demo</title>
+  <style>
+    #draggable {
+      width: 80px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+      background-color: red;
+      user-select: none;
+      -moz-user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      cursor: pointer;
+      position: absolute;
+    }
+  </style>
+  <script src="./lib.js"></script>
+  <script>
+    // mouse
+    window.addEventListener('DOMContentLoaded', () => {
+      var elem = document.getElementById('draggable');
+      var press;
+      var plotter;
+      var option = {
+        xAxis: {
+          label: 'pageX',
+          color: 'blue'
+        },
+        yAxis: {
+          label: 'pageY',
+          flip: true,
+          color: 'green',
+          length: 30
+        }
+      };
+      console.log('option = ' + JSON.stringify(option, null, 2));
+      elem.addEventListener('mousedown', (e) => {
+        press = true;
+        plotter = new ScatterPlot(option);
+      });
+      window.addEventListener('mousemove', (e) => {
+        if (press) {
+          elem.setAttribute('style', 'left:' + (e.pageX - 40) + 'px; top:' + (e.pageY - 20) + 'px;');
+          plotter.points.push({
+            x: e.pageX,
+            y: e.pageY,
+            color: 'red'
+          });
+        }
+      });
+      window.addEventListener('mouseup', (e) => {
+        if (press) {
+          press = false;
+          plotter.print();
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+  <p>Open Developer Tools and bring focus to the console</p>
+  <span id="draggable">DragMe!</span>
+</body>
+</html>

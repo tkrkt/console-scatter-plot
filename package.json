@@ -2,15 +2,17 @@
   "name": "console-scatter-plot",
   "version": "1.0.0",
   "description": "",
-  "main": "lib.js",
+  "main": "./docs/lib.js",
   "scripts": {
-    "build": "babel src.js -o lib.js",
+    "build": "babel ScatterPlot.js -o ./docs/lib.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "tkrkt",
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.14.0",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-transform-es2015-modules-umd": "^6.12.0",
     "babel-preset-es2015": "^6.14.0",
     "babili": "0.0.4"
   },
@@ -18,6 +20,6 @@
     "README.md",
     "package.json",
     "src.js",
-    "lib.js"
+    "docs/lib.js"
   ]
 }
