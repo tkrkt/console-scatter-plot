@@ -319,7 +319,7 @@
           color: this.xAxis.color
         });
 
-        // pring minY/maxY
+        // print minY/maxY
         var minYPos = topMargin + this.yAxis.length;
         var maxYPos = topMargin;
 
@@ -372,7 +372,7 @@
     }, {
       key: 'string',
       value: function string() {
-        this.createPlotter().string();
+        return this.createPlotter().string();
       }
     }]);
 

@@ -1,6 +1,6 @@
 {
   "name": "console-scatter-plot",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple scatter plot generator writing into browser/node console",
   "main": "./docs/lib.js",
   "scripts": {
