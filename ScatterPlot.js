@@ -223,7 +223,7 @@ export default class ScatterPlot {
       color: this.xAxis.color
     });
 
-    // pring minY/maxY
+    // print minY/maxY
     let [minYPos, maxYPos] = [topMargin + this.yAxis.length, topMargin];
     if (this.yAxis.flip) {
       [minYPos, maxYPos] = [maxYPos, minYPos];
@@ -265,6 +265,6 @@ export default class ScatterPlot {
   }
 
   string() {
-    this.createPlotter().string();
+    return this.createPlotter().string();
   }
 }
