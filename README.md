@@ -1,5 +1,7 @@
 # console-scatter-plot
 
+Simple scatter plot generator writing into browser/node console
+
 ```
 npm install --save console-scatter-plot
 ```
@@ -45,8 +47,8 @@ scatterPlot.print(); // print to console
 ||length|20|
 ||color||
 ||flip|false|
-|points[]|x||
-||y||
+|points[]|x|(required)|
+||y|(required)|
 ||marker|'\*'|
 ||color||
 

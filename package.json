@@ -1,11 +1,15 @@
 {
   "name": "console-scatter-plot",
   "version": "1.0.0",
-  "description": "",
+  "description": "Simple scatter plot generator writing into browser/node console",
   "main": "./docs/lib.js",
   "scripts": {
     "build": "babel ScatterPlot.js -o ./docs/lib.js",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tkrkt/console-scatter-plot.git"
   },
   "author": "tkrkt",
   "license": "MIT",
@@ -13,8 +17,7 @@
     "babel-cli": "^6.14.0",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-es2015-modules-umd": "^6.12.0",
-    "babel-preset-es2015": "^6.14.0",
-    "babili": "0.0.4"
+    "babel-preset-es2015": "^6.14.0"
   },
   "files": [
     "README.md",
