@@ -36,24 +36,24 @@ scatterPlot.print(); // print to console
 
 ## option
 
-|param||default|
+|param|-|default|
 |---|---|---|
 |xAxis|label|'x'|
-||min|(auto)|
-||max|(auto)|
-||length|60|
-||color||
-||flip|false|
+| |min|(auto)|
+| |max|(auto)|
+| |length|60|
+| |color|(default)|
+| |flip|false|
 |yAxis|label|'y'|
-||min|(auto)|
-||max|(auto)|
-||length|20|
-||color||
-||flip|false|
+| |min|(auto)|
+| |max|(auto)|
+| |length|20|
+| |color|(default)|
+| |flip|false|
 |points[]|x|(required)|
-||y|(required)|
-||marker|'\*'|
-||color||
+| |y|(required)|
+| |marker|'\*'|
+| |color|(default)|
 
 
 ## color option
